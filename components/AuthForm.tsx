@@ -21,7 +21,7 @@ const authSchema = (type: FormType) => {
   return z.object({
     name: type === "sign-up" ? z.string().min(3) : z.string().optional(),
     email: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
+    password: z.string().min(8),
   });
 };
 
@@ -97,7 +97,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
   }
 
   const isSignIn = type === "sign-in";
-  const isSignUp = type === "sign-up";
 
   return (
     <div className="card-border lg:min-w-[566px]">
