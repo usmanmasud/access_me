@@ -1,3 +1,5 @@
+import { db } from "@/firebase/admin";
+
 export async function getInterviewByUserId(
   userid: string
 ): Promise<Interview[] | null> {
@@ -11,6 +13,11 @@ export async function getInterviewByUserId(
     id: doc.id,
     ...doc.data(),
   })) as Interview[];
+}
+export async function getInterviewById(id: string): Promise<Interview | null> {
+  const interview = await db.collection("interviews").doc(id).get();
+
+  return interview.data() as Interview | null;
 }
 
 export async function getLatestInterviews(
