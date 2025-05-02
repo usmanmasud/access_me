@@ -6,11 +6,11 @@ import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 
 export async function getInterviewByUserId(
-  userid: string
+  userId: string
 ): Promise<Interview[] | null> {
   const interviews = await db
     .collection("interviews")
-    .where("userId", "==", userid)
+    .where("userId", "==", userId)
     .orderBy("createdAt", "desc")
     .get();
 
