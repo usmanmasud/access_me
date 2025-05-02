@@ -4,6 +4,7 @@ import { dummyInterviews } from "@/constants";
 import {
   getCurrentUser,
   getInterviewByUserId,
+  getLatestInterviews,
 } from "@/lib/actions/auth.action";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,8 +12,14 @@ import React from "react";
 
 const page = async () => {
   const user = await getCurrentUser();
-  const userInterviews = await getInterviewByUserId(user?.id!);
+
+  const [userInterviews, latestInterviews] = await Promise.all([
+    getInterviewByUserId(user?.id!),
+    await getLatestInterviews({ userId: user?.id! }),
+  ]);
+
   const hasPassInterview = userInterviews?.length > 0;
+  const hasUpcomingInterview = latestInterviews?.length > 0;
 
   return (
     <>
@@ -55,9 +62,13 @@ const page = async () => {
 
         <div className="interviews-section">
           <div className="interviews-section">
-            {dummyInterviews.map((interview) => (
-              <InterviewCard {...interview} key={interview.id} />
-            ))}
+            {hasUpcomingInterview ? (
+              latestInterviews?.map((interview) => (
+                <InterviewCard {...interview} key={interview.id} />
+              ))
+            ) : (
+              <p>There are no new interviews available</p>
+            )}
           </div>
         </div>
       </section>
